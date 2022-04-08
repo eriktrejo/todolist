@@ -1,0 +1,83 @@
+:root {
+    --width: 90%;
+    --font-size: 14px;
+}
+
+html, body {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: var(--font-size);
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: inherit;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+}
+
+#list {
+    flex: 1;
+    width: var(--width);
+    padding: 10px;
+}
+
+.list-item {
+    display: grid;
+    grid-template-columns: [start] 32px [content] 1fr [end] 32px;
+}
+
+.list-item.status {
+    grid-column: start;
+}
+
+.icon {
+    font-size: 20px;
+}
+
+.list-item textarea {
+    grid-column: content;
+    overflow-y: hidden;
+    border: none;
+    border-bottom: 2px solid lightgray;
+    font-size: var(--font-size);
+    resize: none;
+}
+
+.list-item textarea.complete {
+    color: gray;
+}
+
+.list-item .delete {
+    grid-column: end;
+}
+
+.list-item .delete .icon {
+    margin-left: 10px;
+}
+
+#menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 60px;
+    width: var(--width);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#menu button {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: var(--font-size);
+}

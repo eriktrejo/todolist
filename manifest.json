@@ -1,0 +1,10 @@
+{
+    "name": "To Do List",
+    "short_name": "To Do List",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#000000",
+    "description": "A simple to do list app."
+  }
+  
