@@ -1,23 +1,35 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const newItemButton = document.getElementById('new-item');
     const clearListButton = document.getElementById('clear-list');
+    const textArea = document.getElementById('text-area');
+    const newItemButton = document.getElementById('new-item');
 
-    newItemButton.addEventListener('click', newItem);
     clearListButton.addEventListener('click', clearList);
+    textArea.addEventListener('keydown', onKeydown);
+    newItemButton.addEventListener('click', newItem);
+    
 });
 
 function newItem() {
-    const list = document.getElementById('list');
-    
-    if (list.querySelector('.placeholder')) {
-        const placeholder = list.querySelector('.placeholder');
-        list.removeChild(placeholder);
-    }
+    const textArea = document.getElementById('text-area');
+    const value = textArea.value;
 
-    list.appendChild(createListItemElement());
+    if (value !== '') {
+        const list = document.getElementById('list');
+    
+        if (list.querySelector('.placeholder')) {
+            const placeholder = list.querySelector('.placeholder');
+            list.removeChild(placeholder);
+        }
+
+        const listItem = createListItemElement(value);
+        list.appendChild(listItem);
+        
+        textArea.value = '';
+        listItem.scrollIntoView();
+    }
 }
 
-function createListItemElement() {
+function createListItemElement(value) {
     const listItem = document.createElement('div');
     listItem.classList.add('list-item');
 
@@ -29,9 +41,10 @@ function createListItemElement() {
     statusContainer.appendChild(statusIcon);
     listItem.appendChild(statusContainer);
 
-    const textArea = document.createElement('textarea');
-    textArea.addEventListener('input', onInput);
-    listItem.appendChild(textArea);
+    const content = document.createElement('div');
+    content.classList.add('content');
+    content.textContent = value;
+    listItem.appendChild(content);
 
     const deleteContainer = document.createElement('div');
     deleteContainer.classList.add('delete');
@@ -47,22 +60,25 @@ function createListItemElement() {
 function onClick() {
     const statusContainer = this.parentElement;
     const listItem = statusContainer.parentElement;
-    const textArea = listItem.querySelector('textarea');
+    const content = listItem.querySelector('.content');
 
     if (this.classList.contains('ms-Icon--Checkbox')) {
         this.classList.remove('ms-Icon--Checkbox');
         this.classList.add('ms-Icon--CheckboxComposite');
-        textArea.classList.toggle('complete');
+        content.classList.toggle('complete');
     } else {
         this.classList.remove('ms-Icon--CheckboxComposite');
         this.classList.add('ms-Icon--Checkbox');
-        textArea.classList.toggle('complete');
+        content.classList.toggle('complete');
     }
     
 }
-function onInput() {
-    this.style.height = "auto";
-    this.style.height = (this.scrollHeight) + "px";
+
+function onKeydown(e) {
+    if (e.keyCode == 13) {
+        e.preventDefault();
+        newItem(this);
+    }
 }
 
 function onDelete() {
@@ -70,7 +86,7 @@ function onDelete() {
     const listItem = deleteContainer.parentElement;
     const list = listItem.parentElement;
 
-    list.removeChild(listItem);
+    listItem.remove();
     if (list.children.length == 0) {
         list.appendChild(createPlaceholderElement());
     }
@@ -80,8 +96,10 @@ function clearList() {
     const list = document.getElementById('list');
     const listItems = list.querySelectorAll('.list-item');
 
-    for (const listItem of listItems) {
-        list.removeChild(listItem);
+    if (listItems.length > 0) {
+        for (const listItem of listItems) {
+            list.removeChild(listItem);
+        }
     }
 
     if (!list.querySelector('.placeholder')) {
